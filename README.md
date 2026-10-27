@@ -6,7 +6,7 @@ A calm, minimal desktop companion for macOS. Keep your favorite apps, a personal
 
 ## Download
 
-Get **Quiet Desktop.zip** from the [latest release](https://github.com/nawenxuanli/quiet-desktop/releases/latest). Unzip it, then drag **Quiet Desktop.app** into Applications and open it.
+Get the **app ZIP** from the [latest release](https://github.com/nawenxuanli/quiet-desktop/releases/latest). Unzip it, then drag **Quiet Desktop.app** into Applications and open it.
 
 **Requirements:** Apple silicon Mac (M1 or newer), macOS 14 or later. The downloadable build is for Apple silicon. Intel builds are not included or tested.
 
@@ -14,7 +14,7 @@ This is a locally built, ad-hoc signed app, not Apple-notarized. macOS may requi
 
 ## Features
 
-- Large clock, date, and a quiet light or dark appearance.
+- Large clock, date, and System, Light, and Dark appearance choices. System follows macOS automatic appearance changes.
 - App search: press **Command K**, type an app name, then press Return.
 - **Within Reach:** click **Edit** to add, remove, or reorder favorite apps.
 - A photo panel: choose from Photos or an image file.

@@ -118,7 +118,10 @@ final class DesktopModel: ObservableObject {
 struct DesktopView: View {
     @StateObject private var model = DesktopModel()
     @AppStorage("quietdesktop.note") private var note = ""
-    @AppStorage("quietdesktop.light") private var light = false
+    @AppStorage("quietdesktop.appearance") private var appearance = UserDefaults.standard.object(forKey: "quietdesktop.light") == nil ? "system" : (UserDefaults.standard.bool(forKey: "quietdesktop.light") ? "light" : "dark")
+    @Environment(\.colorScheme) private var systemColorScheme
+    private var preferredScheme: ColorScheme? { appearance == "light" ? .light : appearance == "dark" ? .dark : nil }
+    private var light: Bool { preferredScheme == .light || (preferredScheme == nil && systemColorScheme == .light) }
     @FocusState private var searchFocused: Bool
     private var ink: Color { light ? Color(red: 0.16, green: 0.18, blue: 0.17) : Color(red: 0.91, green: 0.92, blue: 0.88) }
     private var background: Color { light ? Color(red: 0.94, green: 0.94, blue: 0.90) : Color(red: 0.075, green: 0.09, blue: 0.085) }
@@ -133,7 +136,15 @@ struct DesktopView: View {
                             Text("QUIET DESKTOP").font(.system(size: 10, weight: .medium, design: .monospaced)).tracking(2.5)
                         }
                         Spacer()
-                        Button { light.toggle() } label: { Image(systemName: light ? "moon" : "sun.max") }.help("Switch appearance")
+                        Menu {
+                            Picker("Appearance", selection: $appearance) {
+                                Label("System", systemImage: "desktopcomputer").tag("system")
+                                Label("Light", systemImage: "sun.max").tag("light")
+                                Label("Dark", systemImage: "moon").tag("dark")
+                            }.pickerStyle(.inline)
+                        } label: {
+                            Image(systemName: appearance == "system" ? "desktopcomputer" : light ? "sun.max" : "moon")
+                        }.menuStyle(.borderlessButton).fixedSize().help("Appearance: System, Light, or Dark").accessibilityLabel("Appearance")
                         Button { NSApp.keyWindow?.toggleFullScreen(nil) } label: { Image(systemName: "arrow.up.left.and.arrow.down.right") }.help("Toggle full screen · Control Command F")
                         Button { NSApp.hide(nil) } label: { Image(systemName: "rectangle.on.rectangle") }.help("Return to your usual desktop · Command H")
                     }.foregroundStyle(muted).buttonStyle(.plain).font(.system(size: 15)).padding(.bottom, 58)
@@ -199,14 +210,14 @@ struct DesktopView: View {
                 }.padding(.horizontal, geometry.size.width < 800 ? 36 : 72).padding(.top, 38).padding(.bottom, 28).frame(maxWidth: 1080).frame(maxWidth: .infinity).frame(minHeight: geometry.size.height)
             }.background(background).foregroundStyle(ink)
         }
-        .preferredColorScheme(light ? .light : .dark)
+        .preferredColorScheme(preferredScheme)
         .frame(minWidth: 680, minHeight: 650)
         .sheet(isPresented: $model.editingFavorites) {
             FavoritesEditor(model: model)
-                .preferredColorScheme(light ? .light : .dark)
+                .preferredColorScheme(preferredScheme)
         }
         .sheet(isPresented: $model.editingCrop) {
-            PhotoCropEditor(model: model).preferredColorScheme(light ? .light : .dark)
+            PhotoCropEditor(model: model).preferredColorScheme(preferredScheme)
         }
         .background(Button("") { searchFocused = true }.keyboardShortcut("k", modifiers: .command).hidden())
         .onChange(of: model.selectedPhoto) { _, selection in
