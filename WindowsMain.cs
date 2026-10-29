@@ -93,7 +93,7 @@ public sealed class DesktopWindow : Window {
         Content = new ScrollViewer { Content = body, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, HorizontalContentAlignment = HorizontalAlignment.Center };
         ApplyTheme(true);
         var header = Row(); header.Children.Add(Text("●  QUIET DESKTOP", 11, "Muted"));
-        var controls = Row(); controls.HorizontalAlignment = HorizontalAlignment.Right;
+        var controls = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right };
         var appearance = new ComboBox { Width = 105, ItemsSource = new[] { "System", "Light", "Dark" }, SelectedItem = store.Data.Appearance, ToolTip = "Appearance" };
         appearance.SelectionChanged += (_, _) => { store.Data.Appearance = appearance.SelectedItem?.ToString() ?? "System"; ApplyTheme(true); Save(); };
         controls.Children.Add(appearance); controls.Children.Add(Button("⛶", ToggleFullScreen, "Full screen · F11")); controls.Children.Add(Button("—", () => WindowState = WindowState.Minimized, "Minimize"));
@@ -263,7 +263,9 @@ public static class Program {
         }
         var window=new DesktopWindow(store,true){Width=1440,Height=1000};window.Show();window.UpdateLayout();
         app.Dispatcher.Invoke(()=>{},DispatcherPriority.ApplicationIdle);
-        var bitmap=new RenderTargetBitmap((int)window.ActualWidth,(int)window.ActualHeight,96,96,PixelFormats.Pbgra32);bitmap.Render(window);
+        var content=(FrameworkElement)window.Content;
+        content.Measure(new Size(1440,1000));content.Arrange(new Rect(0,0,1440,1000));content.UpdateLayout();
+        var bitmap=new RenderTargetBitmap(1440,1000,96,96,PixelFormats.Pbgra32);bitmap.Render(content);
         var encoder=new PngBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(bitmap));using(var file=File.Create(System.IO.Path.Combine(directory,"windows-preview.png")))encoder.Save(file);
         window.Close();File.WriteAllText(System.IO.Path.Combine(directory,"checks.json"),"{\"settingsRoundTrip\":true,\"cropNeverShowsGaps\":true,\"nativeWindowRendered\":true}");return 0;
     }

@@ -6,13 +6,16 @@ A calm, minimal desktop companion for macOS and Windows. Keep your favorite apps
 
 ## Download
 
-The native Windows edition, build instructions, requirements, and Store packaging details are in [WINDOWS.md](WINDOWS.md). macOS instructions follow below.
+| Platform | Download | Requirements |
+| --- | --- | --- |
+| Windows | [Windows x64 ZIP, version 1.6.0](https://github.com/nawenxuanli/quiet-desktop/releases/tag/v1.6.0) | Windows 10 version 2004 or later / Windows 11, x64 |
+| macOS | [Mac ZIP, version 1.5.0](https://github.com/nawenxuanli/quiet-desktop/releases/tag/v1.5.0) | Apple silicon (M1 or newer), macOS 14+ |
 
-Get the **app ZIP** from the [latest release](https://github.com/nawenxuanli/quiet-desktop/releases/latest). Unzip it, then drag **Quiet Desktop.app** into Applications and open it.
+For Windows, extract the entire ZIP and open QuietDesktop.exe. Read [WINDOWS.md](WINDOWS.md) for features, shortcuts, build instructions, and Microsoft Store packaging. The Windows runner has passed compilation, native window rendering, settings round-trip, and crop-boundary checks. Microsoft Store certification is a separate step and has not been completed.
 
-**Requirements:** Apple silicon Mac (M1 or newer), macOS 14 or later. The downloadable build is for Apple silicon. Intel builds are not included or tested.
+For macOS, unzip the download, drag Quiet Desktop.app into Applications, and open it. The Mac build is ad-hoc signed and not Apple-notarized. Standalone Windows downloads are not Authenticode-signed. Your operating system may require you to review the app before opening it; keep system security protections enabled.
 
-This is a locally built, ad-hoc signed app, not Apple-notarized. macOS may require you to review it in System Settings → Privacy & Security before opening. Keep system security protections enabled.
+The remaining usage and build instructions below describe the macOS edition. Windows instructions are in WINDOWS.md.
 
 ## Features
 

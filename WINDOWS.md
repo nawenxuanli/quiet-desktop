@@ -47,4 +47,4 @@ Notes, appearance, favorites, crop settings, and a resized photo copy are stored
 
 ## Validation status
 
-The Windows source compiles on the development Mac. Windows runner checks and Store certification must be verified independently from their actual results; no Store approval is implied by the presence of these packaging scripts.
+The Windows source compiled on the development Mac with zero warnings or errors. GitHub Windows run 40881572542 passed compilation, native window rendering, settings round-trip, and crop-boundary checks. The preview still requires visual review. Microsoft Store packaging/certification is pending the reserved product identity and a separate certification run; no Store approval is implied.

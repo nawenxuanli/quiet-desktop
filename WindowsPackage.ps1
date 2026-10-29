@@ -38,6 +38,10 @@ try {
     $certificate = New-SelfSignedCertificate -Type Custom -Subject $env:QUIET_STORE_PUBLISHER -KeyUsage DigitalSignature -FriendlyName 'Quiet Desktop CI test only' -CertStoreLocation 'Cert:\CurrentUser\My' -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3', '2.5.29.19={text}')
     & (Join-Path $sdk.FullName 'x64\signtool.exe') sign /fd SHA256 /sha1 $certificate.Thumbprint $testPackage | Out-Null
     if ($LASTEXITCODE -ne 0) { throw 'Certification test signing failed.' }
+    $cer = Join-Path $root 'ci-test.cer'
+    Export-Certificate -Cert $certificate -FilePath $cer | Out-Null
+    Import-Certificate -FilePath $cer -CertStoreLocation 'Cert:\LocalMachine\TrustedPeople' | Out-Null
+    Remove-Item $cer -Force
     $wack = 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\appcert.exe'
     if (-not (Test-Path $wack)) { throw 'Windows App Certification Kit not installed on this runner.' }
     & $wack reset | Out-Null
