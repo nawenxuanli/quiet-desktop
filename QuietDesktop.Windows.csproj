@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType><TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF><EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <AssemblyName>QuietDesktop</AssemblyName><Version>1.6.0</Version>
+    <ApplicationManifest>WindowsApp.manifest</ApplicationManifest><ApplicationIcon>WindowsIcon.ico</ApplicationIcon><StartupObject>QuietDesktop.Windows.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup><Compile Include="WindowsMain.cs" /></ItemGroup>
+</Project>

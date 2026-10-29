@@ -2,9 +2,11 @@
 
 # Quiet Desktop
 
-A calm, minimal desktop companion for macOS. Keep your favorite apps, a personal photo, and a little space for notes within reach.
+A calm, minimal desktop companion for macOS and Windows. Keep your favorite apps, a personal photo, and a little space for notes within reach.
 
 ## Download
+
+The native Windows edition, build instructions, requirements, and Store packaging details are in [WINDOWS.md](WINDOWS.md). macOS instructions follow below.
 
 Get the **app ZIP** from the [latest release](https://github.com/nawenxuanli/quiet-desktop/releases/latest). Unzip it, then drag **Quiet Desktop.app** into Applications and open it.
 
