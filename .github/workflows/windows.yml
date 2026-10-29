@@ -1,0 +1,46 @@
+name: Windows build and Store package
+on:
+  push:
+    branches: [main]
+    paths: ['WindowsMain.cs', 'QuietDesktop.Windows.csproj', 'WindowsBuild.ps1', 'WindowsPackage.ps1', 'WindowsIcon.ico', 'WindowsApp.manifest', 'Windows*.png', '.github/workflows/windows.yml']
+  workflow_dispatch:
+    inputs:
+      store_package:
+        description: Build MSIX using the reserved Partner Center identity and run WACK
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build and run native checks
+        shell: pwsh
+        run: ./WindowsBuild.ps1
+      - name: Package for Microsoft Store and run certification checks
+        if: ${{ inputs.store_package == true }}
+        shell: pwsh
+        env:
+          QUIET_STORE_PACKAGE_NAME: ${{ secrets.QUIET_STORE_PACKAGE_NAME }}
+          QUIET_STORE_PUBLISHER: ${{ secrets.QUIET_STORE_PUBLISHER }}
+          QUIET_STORE_PUBLISHER_DISPLAY_NAME: ${{ secrets.QUIET_STORE_PUBLISHER_DISPLAY_NAME }}
+        run: ./WindowsPackage.ps1
+      - name: Upload Windows deliverables and verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Quiet-Desktop-Windows-x64
+          path: |
+            windows-build/*.zip
+            windows-build/*.json
+            windows-build/*.msix
+            windows-build/validation/*.png
+            windows-build/validation/checks.json
+            windows-build/certification-report.xml
+          if-no-files-found: error
