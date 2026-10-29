@@ -264,8 +264,11 @@ public static class Program {
         var window=new DesktopWindow(store,true){Width=1440,Height=1000};window.Show();window.UpdateLayout();
         app.Dispatcher.Invoke(()=>{},DispatcherPriority.ApplicationIdle);
         var content=(FrameworkElement)window.Content;
-        content.Measure(new Size(1440,1000));content.Arrange(new Rect(0,0,1440,1000));content.UpdateLayout();
-        var bitmap=new RenderTargetBitmap(1440,1000,96,96,PixelFormats.Pbgra32);bitmap.Render(content);
+        window.Content=null;
+        var capture=new Border{Width=1440,Height=1000,Background=window.Background,Child=content};
+        System.Windows.Documents.TextElement.SetFontFamily(capture,window.FontFamily);System.Windows.Documents.TextElement.SetFontSize(capture,window.FontSize);System.Windows.Documents.TextElement.SetForeground(capture,window.Foreground);
+        capture.Measure(new Size(1440,1000));capture.Arrange(new Rect(0,0,1440,1000));capture.UpdateLayout();
+        var bitmap=new RenderTargetBitmap(1440,1000,96,96,PixelFormats.Pbgra32);bitmap.Render(capture);
         var encoder=new PngBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(bitmap));using(var file=File.Create(System.IO.Path.Combine(directory,"windows-preview.png")))encoder.Save(file);
         window.Close();File.WriteAllText(System.IO.Path.Combine(directory,"checks.json"),"{\"settingsRoundTrip\":true,\"cropNeverShowsGaps\":true,\"nativeWindowRendered\":true}");return 0;
     }
